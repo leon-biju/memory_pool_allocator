@@ -6,11 +6,9 @@ int main() {
 
     std::string* k = Pool.allocate();
     *k = "hello world";
-    std::println(stderr, "{}", *k);
+    std::print("{}", *k);
     Pool.deallocate(k);
 
-    //try and double delete
-    Pool.deallocate(k);
 
     return 0;
 }
