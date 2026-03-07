@@ -29,7 +29,6 @@ struct Tracked {
 };
 
 // Basic allocation
-
 TEST(MemoryPoolTest, AllocateReturnsNonNull) {
     MemoryPool<Trivial, 8> pool;
     Trivial* p = pool.allocate();
@@ -71,7 +70,6 @@ TEST(MemoryPoolTest, AllocateFromEmptyPoolAfterDeallocate) {
 }
 
 // Capacity and sizing
-
 TEST(MemoryPoolTest, ExactCapacityAllocationsSucceed) {
     constexpr size_t N = 16;
     MemoryPool<Trivial, N> pool;
@@ -91,10 +89,7 @@ TEST(MemoryPoolTest, OneOverCapacityFails) {
     EXPECT_EQ(pool.allocate(), nullptr);
 }
 
-// ---------------------------------------------------------------------------
 // Deallocation and reuse
-// ---------------------------------------------------------------------------
-
 TEST(MemoryPoolTest, DeallocateAllowsReuse) {
     MemoryPool<Trivial, 4> pool;
     std::vector<Trivial*> ptrs;
@@ -141,7 +136,6 @@ TEST(MemoryPoolTest, ReallocatedPointerIsUsable) {
 }
 
 // Double-free detection
-
 TEST(MemoryPoolTest, DoubleFreeThrows) {
     MemoryPool<Trivial, 4> pool;
     Trivial* p = pool.allocate();
@@ -164,7 +158,6 @@ TEST(MemoryPoolTest, DoubleFreeMessageIsDescriptive) {
 }
 
 // Invalid pointer detection
-
 TEST(MemoryPoolTest, DeallocateNullptrSucceeds) {
     MemoryPool<Trivial, 4> pool;
     EXPECT_NO_THROW(pool.deallocate(nullptr));
@@ -177,7 +170,6 @@ TEST(MemoryPoolTest, DeallocateOutOfRangePointerThrows) {
 }
 
 // Alignment
-
 TEST(MemoryPoolTest, AllocatedPointersAreAligned) {
     MemoryPool<Trivial, 8> pool;
     for (int i = 0; i < 8; ++i) {
@@ -200,7 +192,6 @@ TEST(MemoryPoolTest, CacheLineAlignedTypeIsAligned) {
 }
 
 // Non-trivial types
-
 TEST(MemoryPoolTest, NonTrivialTypeIsStoredCorrectly) {
     MemoryPool<NonTrivial, 4> pool;
     NonTrivial* p = pool.allocate();
@@ -212,8 +203,7 @@ TEST(MemoryPoolTest, NonTrivialTypeIsStoredCorrectly) {
     pool.deallocate(p);
 }
 
-// Since the pool gives you raw memory,  the caller is responsible (placement new / manual dtor call).
-// These tests verify the pool doesn't do anything with the actual data.
+
 
 TEST(MemoryPoolTest, PoolDoesNotCorruptStoredData) {
     MemoryPool<Trivial, 4> pool;
@@ -234,7 +224,6 @@ TEST(MemoryPoolTest, PoolDoesNotCorruptStoredData) {
 }
 
 // Repeated alloc/dealloc cycles
-
 TEST(MemoryPoolTest, RepeatedAllocDeallocCycles) {
     MemoryPool<Trivial, 4> pool;
     for (int cycle = 0; cycle < 1000; ++cycle) {

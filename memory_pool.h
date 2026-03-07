@@ -8,13 +8,14 @@ class MemoryPool {
     // so we do raw bytes
     alignas(T) std::byte storage_[sizeof(T) * Capacity]{};
 
-    std::size_t free_list_[Capacity]{}; // free_list[0 to free_count-1] contains all free blocks
-    std::size_t free_count_ = Capacity;
+    std::size_t free_list_[Capacity]{}; // free_list keeps track of indexes of free slots -- more of a free stack tbh
+    std::size_t free_count_ = Capacity; // used to see which slot to allocate
 
     bool allocated_[Capacity]{}; //Used for checking double frees
 
 public:
     MemoryPool() {
+        // all slots are free at this point
         for (std::size_t i = 0; i < Capacity; ++i) {
             free_list_[i] = i;
         }
@@ -31,7 +32,7 @@ public:
         if (free_count_ == 0) {
             return nullptr;
         }
-        auto index = free_list_[--free_count_];
+        std::size_t index = free_list_[--free_count_];
 
         allocated_[index] = true;
 
