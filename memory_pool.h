@@ -1,5 +1,7 @@
 #ifndef MEMORY_POOL_ALLOCATOR_MEMORY_POOL_H
 #define MEMORY_POOL_ALLOCATOR_MEMORY_POOL_H
+#include <format>
+#include <stdexcept>
 
 
 template <typename T, std::size_t Capacity>
